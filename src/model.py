@@ -92,7 +92,7 @@ class EmbeddingAutoEncoder():
 		logger.info("Loading model from {path}".format(path=os.path.join(self.modelpath)))
 		#print("Graph:",os.path.join(self.modelpath, 'george-'+str(self.batchesNo)+'.meta'))
 		self.saver = tf.train.Saver()
-		self.saver = tf.train.import_meta_graph(os.path.join(self.modelpath, 'george-'+str(self.batchesNo)+'.meta'))
+		self.saver = tf.train.import_meta_graph(os.path.join(self.modelpath, self.modelname+'-'+str(self.batchesNo)+'.meta'))
 		self.saver.restore(self.sess, tf.train.latest_checkpoint(self.modelpath))
 
 	def batch_prep(self):
@@ -207,10 +207,10 @@ class EmbeddingAutoEncoder():
 		Runs the model pipeline depending on user arguments
 		"""
 		self.embDict, self.trainset, self.evalset, self.testset = embDict, trainset, evalset, testset
-		self.prepare_data()
-		self.init_weights_and_biases()
-		self.define_model_architecture()
-		self.train_model()
+		if self.mode=='train':
+			self.train_model()
+		else:
+			self.run_inference()
 
 	def train_model(self):
 		"""
@@ -218,6 +218,9 @@ class EmbeddingAutoEncoder():
 		Returns:
 			Success Code
 		"""
+		self.prepare_data()
+		self.init_weights_and_biases()
+		self.define_model_architecture()
 		with tf.Session(config=self.config) as self.sess:
 			self.sess.run(tf.global_variables_initializer())
 			self.saver = tf.train.Saver()

@@ -29,7 +29,7 @@ def arg_parser(argv):
 						default='info', help='set logging level')
 
 	parser.add_argument('-m', '--mode', type=str.lower, choices=['train', 'inference'],
-						default='train', help='Train/Inference selection')
+						default='inference', help='Train/Inference selection')
 
 	parser.add_argument('--configpath', type=str, dest='configpath',
 						default='../config', help='Config directory')
