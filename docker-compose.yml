@@ -1,0 +1,20 @@
+version: '3'
+services:
+  autoencoder:
+    image: autoencoderimage
+    stdin_open: true                # docker run -i
+    tty: true                       # docker run -t
+    build: .
+    command: python ./src/run.py 
+    #runtime: nvidia                          # remove for CPU only execution: will throw error if drivers not installed!
+    container_name: autoencodercontainer
+    volumes:
+     - type: bind         
+       source: ./scaler
+       target: /scaler
+     - type: bind
+       source: ./encoder
+       target: /encoder
+     - type: bind
+       source: ./model
+       target: /model
